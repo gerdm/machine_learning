@@ -44,9 +44,11 @@ class Perceptron(object):
         current_weights = self.w_init
   
         while True:
+            iter += 1
+            print("At iteration {iter}\r".format(iter=iter))
             mistakes0, mistakes1 = self.eval_perceptron(current_weights)
-            total_errors = np.size(mistakes0, 1) + np.size(mistakes1, 1)
-            self.num_err_history = np.append(num_err_history, total_errors)
+            total_errors = np.size(mistakes0) + np.size(mistakes1)
+            self.num_err_history = np.append(self.num_err_history, total_errors)
             
             # Update the distance from the current weight
             # to the feasible weight vector
@@ -55,7 +57,6 @@ class Perceptron(object):
                 sellf.w_dist_history = np.append(self.w_dist_history)
 
             current_weights = self.update_weights(current_weights)
-            iter += 1
 
             if (iter > iter_threshold) or (total_errors <= err_threshold):
                 self.learned_weights = current_weights
@@ -76,7 +77,20 @@ class Perceptron(object):
         -------
         3x1 vector 
         """
-        pass
+        wprime = weights.reshape((1, 3))
+        neg, pos = self.eval_perceptron(weights)
+
+        # If it is a unlearned positive weight,
+        # we must increment the weight by the input vector
+        for row in self.pos_examples[pos, :]:
+            wprime += row 
+
+        # If it is a unlearned negative weight,
+        # we must decrement the weight by the input vector
+        for row in self.neg_examples[neg, :]:
+            wprime -= row
+
+        return wprime.reshape((3,1))
 
     def eval_perceptron(self, weights):
         """
@@ -101,6 +115,6 @@ class Perceptron(object):
         predict1 = self.pos_examples @ weights
 
         mistakes0 = np.flatnonzero(predict0 >= 0)
-        mistakes1 = np.flatnonzero(predict1 < 1)
+        mistakes1 = np.flatnonzero(predict1 < 0)
         
         return mistakes0, mistakes1
