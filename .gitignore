@@ -35,6 +35,8 @@ __pycache__
 *.out
 *.synctex.gz
 *.pdf
+*.DBF
+*.dbf
 
 # Mac IDE files
 *.swp
