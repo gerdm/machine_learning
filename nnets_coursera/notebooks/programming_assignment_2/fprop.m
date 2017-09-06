@@ -56,6 +56,7 @@ hidden_layer_state = zeros(numhid2, batchsize);
 % (a) hidden_layer_state = 1 ./ (1 + exp(inputs_to_hidden_units));
 % (b) hidden_layer_state = 1 ./ (1 - exp(-inputs_to_hidden_units));
 % (c) hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
+hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
 % (d) hidden_layer_state = -1 ./ (1 + exp(-inputs_to_hidden_units));
 
 %% COMPUTE STATE OF OUTPUT LAYER.
