@@ -2,6 +2,11 @@
 __pycache__
 .ipynb_checkpoints
 
+# Secret files with codes
+secret.txt
+train.txt
+test.txt
+
 # Python files
 *.swp
 *.swo
