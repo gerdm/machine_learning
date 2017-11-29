@@ -5,6 +5,7 @@ __pycache__
 # Secret files with codes
 *.pkl
 *.txt
+*.xlsx
 
 # Python files
 *.swp
