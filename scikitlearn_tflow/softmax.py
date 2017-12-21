@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class SoftmaxRegression:
     """
@@ -18,6 +19,10 @@ class SoftmaxRegression:
         self.nclasses = y_train.shape[0]
         self.theta = np.zeros((self.nfeatures,
                                self.nclasses))
+
+    def predict(self, X=None):
+        pass
+
     def softmax_mat(self, X=None, theta=None):
         """
         Method to compute the probability for each
@@ -53,9 +58,9 @@ class SoftmaxRegression:
         Parameters
         ----------
         X:  Matrix of size nfeatures X nexamples. If nothing is provided
-            it defaults to use self.X_train
+            it defaults to self.X_train
         y:  Matrix of size nfeatures y nexamples. If nothing is provided
-            it defaults to use self.y_train
+            it defaults to self.y_train
         theta: Matrix of size nfeaturesXnclasses
             If no matrix is provided, we consider self.theta
         """
@@ -86,7 +91,25 @@ class SoftmaxRegression:
             # example, i.e., sum(axis=1)
             grad = ((sigsoftk - self.y_train)[k,:] * self.X_train).sum(axis=1) / m
             grads[:,k] = grad
-        print(grads)
+        return grads
+
+    def train(self, alpha=0.1, iterations=5000, verbose=False, graph_cost=False):
+        """
+        Train the model by means of stochastic gradient descent
+        """
+        cost_hist = []
+        for it in range(iterations):
+            grads = self.compute_grads()
+            self.theta = self.theta - alpha * grads
+
+            cost = self.cost()
+            cost_hist.append(cost)
+            if verbose and it % 100 == 0:
+                print(f"At iteration {it}, cost: {cost}")
+
+        if graph_cost:
+            plt.plot(cost_hist, linewidth=0.5, color="tab:red")
+            plt.show()
         
 if __name__ == "__main__":
     from pydataset import data
@@ -109,4 +132,6 @@ if __name__ == "__main__":
     y_test = y_test.T
     
     model = SoftmaxRegression(X_train, y_train)
-    model.compute_grads()
+    model.train(verbose=True, graph_cost=False)
+    print(np.argmax(model.theta.T @ X_train, axis=0))
+    print(np.arange(3).reshape(1,-1) @ y_train)
