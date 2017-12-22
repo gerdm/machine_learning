@@ -21,7 +21,9 @@ class SoftmaxRegression:
                                self.nclasses))
 
     def predict(self, X=None):
-        pass
+        X = self.X_train if X is None else X
+        prediction = np.argmax(self.theta.T @ X, axis=0)
+        return prediction
 
     def softmax_mat(self, X=None, theta=None):
         """
@@ -93,9 +95,9 @@ class SoftmaxRegression:
             grads[:,k] = grad
         return grads
 
-    def train(self, alpha=0.1, iterations=5000, verbose=False, graph_cost=False):
+    def batch_train(self, alpha=0.1, iterations=5000, verbose=False, graph_cost=False):
         """
-        Train the model by means of stochastic gradient descent
+        Train the model using batch gradient descent
         """
         cost_hist = []
         for it in range(iterations):
@@ -110,11 +112,29 @@ class SoftmaxRegression:
         if graph_cost:
             plt.plot(cost_hist, linewidth=0.5, color="tab:red")
             plt.show()
+
+    def train(self, batches, alpha=0.1, epochs=5, iterations=5000, verbose=False):
+        """
+        Train the model using batch gradient descent.
+
+        Parameters
+        ----------
+        batches: integer
+            Number of elements to consider per iteration in training
+            the model. if batches=1, mini-batch GD becomes SGD. On
+            the other hand, batches=self.nexamples is equivalent to
+            batch GD
+        alpha: double
+            Learning rate factor
+        """
+        pass
         
 if __name__ == "__main__":
     from pydataset import data
     from pandas import get_dummies
     from sklearn.model_selection import train_test_split
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
     
     iris = get_dummies(data("iris"))
     X, y = iris.iloc[:,:4].values, iris.iloc[:,4:].values
@@ -132,6 +152,8 @@ if __name__ == "__main__":
     y_test = y_test.T
     
     model = SoftmaxRegression(X_train, y_train)
-    model.train(verbose=True, graph_cost=False)
-    print(np.argmax(model.theta.T @ X_train, axis=0))
-    print(np.arange(3).reshape(1,-1) @ y_train)
+    model.train(verbose=True, graph_cost=False, iterations=10_000)
+    yhat = model.predict(X_test)
+    ytrue = np.arange(3).reshape(1,-1) @ y_test
+    sns.heatmap(confusion_matrix(ytrue.ravel(), yhat.ravel()), annot=True)
+    plt.show()
