@@ -94,24 +94,6 @@ class SoftmaxRegression:
             grads[:,k] = grad
         return grads
 
-    def batch_train(self, alpha=0.1, iterations=5000, verbose=False, graph_cost=False):
-        """
-        Train the model using batch gradient descent
-        """
-        cost_hist = []
-        for it in range(iterations):
-            grads = self.compute_grads()
-            self.theta = self.theta - alpha * grads
-
-            cost = self.cost()
-            cost_hist.append(cost)
-            if verbose and it % 100 == 0:
-                print(f"At iteration {it}, cost: {cost}")
-
-        if graph_cost:
-            plt.plot(cost_hist, linewidth=0.5, color="tab:red")
-            plt.show()
-
     def shuffle_dataset(self, seed=None):
         """
         Copy and shuffle the training dataset (self.X_train, self.y_train)
