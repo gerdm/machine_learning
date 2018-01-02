@@ -173,14 +173,17 @@ if __name__ == "__main__":
     X_test = X_test.T
     y_test = y_test.T
 
+    # Stochastic Grdient Descent
     model = SoftmaxRegression(X_train, y_train)
-    model.train(batch_size=1, epochs=1000, verbose=True, save_cost_hist=True)
+    model.train(batch_size=1, epochs=1000, alpha=0.03, verbose=True, save_cost_hist=True)
     stochasticdg = model.cost_hist
 
+    # Mini-Batch Gradient Descent
     model = SoftmaxRegression(X_train, y_train)
     model.train(batch_size=20, epochs=1000, verbose=True, save_cost_hist=True)
     minibatchdg = model.cost_hist
-    
+
+    # Batch Gradient Descent
     model = SoftmaxRegression(X_train, y_train)
     model.train(epochs=5000, verbose=True, save_cost_hist=True)
     batchdg = model.cost_hist
