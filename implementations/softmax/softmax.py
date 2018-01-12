@@ -99,8 +99,8 @@ class SoftmaxRegression:
         Copy and shuffle the training dataset (self.X_train, self.y_train)
         along the columns (training examples)
         """
-        stacked = np.r_[self.X_train.copy(),
-                        self.y_train.copy()]
+        stacked = np.r_[self.X_train,
+                        self.y_train]
         shuffle(stacked.T)
         X_shuffled = stacked[:self.nfeatures,:]
         y_shuffled = stacked[self.nfeatures:,:]
@@ -132,6 +132,9 @@ class SoftmaxRegression:
         for epoch in range(epochs):
             X_batch, y_batch = self.shuffle_dataset()
             for batch in range(number_batches):
+                if batch % 10 == 0:
+                    print(f"training batch {batch} for epoch {epoch} of size {batch_size}", end="\r")
+                # Correction factor if training dataset is not evenly divisible
                 fact = 0 if number_batches - 1 != batch else nexamples % batch_size
                 columns = range(batch * batch_size,
                                 (batch + 1) * batch_size + fact)

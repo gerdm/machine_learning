@@ -2,14 +2,16 @@
 # to learn the separations between flowers 
 # inside the iris dataset
 
+import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 from softmax import SoftmaxRegression
 from pydataset import data
 from pandas import get_dummies
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
-import seaborn as sns
 
+# One-Hot encoding the categorical values
 iris = get_dummies(data("iris"))
 X, y = iris.iloc[:,:4].values, iris.iloc[:,4:].values
 X_train, X_test, y_train, y_test = train_test_split(X, y,
@@ -40,6 +42,7 @@ model = SoftmaxRegression(X_train, y_train)
 model.train(epochs=5000, verbose=True, save_cost_hist=True)
 batchdg = model.cost_hist
 
+# Making Figure
 fig = plt.figure(figsize=(10,6), dpi=150)
 ax1 = fig.add_subplot(2,2,1)
 ax2 = fig.add_subplot(2,2,2)
@@ -50,9 +53,12 @@ ax3.plot(batchdg, linewidth=0.5)
 ax1.set_title("SGD")
 ax2.set_title("Mini-Batch GD")
 ax3.set_title("Batch GD")
-plt.savefig("/Users/gerardoduran/Desktop/training.pdf")
+plt.savefig("iris_training.pdf")
 plt.show()
-#yhat = model.predict(X_train)
-#ytrue = np.arange(3).reshape(1,-1) @ y_train
-#sns.heatmap(confusion_matrix(ytrue.ravel(), yhat.ravel()), annot=True)
-#plt.show()
+
+yhat = model.predict(X_test)
+ytrue = np.arange(3).reshape(1,-1) @ y_test
+sns.heatmap(confusion_matrix(ytrue.ravel(), yhat.ravel()), annot=True)
+plt.title("Iris Confusion Matrix\non Test Set")
+plt.savefig("iris_confusion_matrix.pdf")
+plt.show()
