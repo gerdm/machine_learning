@@ -47,7 +47,7 @@ class LinearRegression:
 		"""
 		self.X = tf.placeholder(tf.float32, shape=[None, self.m], name="X")
 		self.y = tf.placeholder(tf.float32, shape=[None, self.m], name="y")
-		self.theta = tf.Variable(tf.random_uniform([n, 1], minval=-1, maxval=1), name="theta")
+		self.theta = tf.Variable(tf.random_uniform([self.m, 1], minval=-1, maxval=1), name="theta")
 
 		self.y_pred = tf.matmul(self.X, self.theta)
 		self.err = self.y_pred - self.y
