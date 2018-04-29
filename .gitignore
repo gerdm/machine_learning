@@ -3,6 +3,9 @@ __pycache__
 .ipynb_checkpoints
 datasets
 images
+# Tensorflow folders
+tmp
+tf_logs
 
 # Secret files with codes
 *.pkl
