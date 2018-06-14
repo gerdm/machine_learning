@@ -4,6 +4,7 @@ __pycache__
 datasets
 # Tensorflow folders
 tmp
+tfmodels
 tf_logs
 
 # Secret files with codes
